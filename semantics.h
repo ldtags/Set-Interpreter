@@ -1,4 +1,4 @@
-#include <stdbool.h>
+#include "SymTab.h"
 
 
 extern void printSymTab();

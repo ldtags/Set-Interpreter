@@ -8,19 +8,28 @@ extern struct SymTab *table;
 
 
 void printSymTab() {
-    startIterator(table);
+    int hasMore = startIterator(table);
+    int hashasMoreMore = 0;
     printf("%20s\t%10s\n", "Variable", "Value");
     SymTab * current = (SymTab*) malloc(sizeof(SymTab*));
-    do {
+
+    while(hasMore) {
         printf("%20s\t{", getCurrentName(table));
         current = getCurrentAttr(table);
-        startIterator(current);
-        do {
-            printf("%s, ", current->current->name);
-        } while(nextEntry(current) != 0);
+        hashasMoreMore = startIterator(current);
+        while(hashasMoreMore) {
+            printf("%s", current->current->name);
+            hashasMoreMore = nextEntry(current);
+            if(hashasMoreMore)
+                printf(", ");
+        }
         printf("}\n");
+
         destroySymTab(current);
-    } while(nextEntry(table) != 0);
+        hasMore = nextEntry(table);
+    }
+
+    free(current);
 }
 
 void storeVar(char * name, SymTab * set) {
@@ -30,45 +39,57 @@ void storeVar(char * name, SymTab * set) {
 
 SymTab * getVal(char * name) {
     if(enterName(table, name)) {
-        WriteIndicator(getCurrentColumnNum());
-        WriteMessage("Initialize variable to empty set");
+        writeIndicator(getCurrentColumnNum());
+        writeMessage("Initialize variable to empty set");
         setCurrentAttr(table, createSymTab(17));
     }
     return getCurrentAttr(table);
 }
 
 SymTab * doUNION(SymTab * set1, SymTab * set2) {
-    if(startIterator(set2) == 0) { 
-        destroySymTab(set2);
-        return set1; 
+    int hasMore = 0;
+    SymTab * union_set = createSymTab(17);
+
+    hasMore = startIterator(set1);
+    while(hasMore) {
+        enterName(union_set, set1->current->name);
+        hasMore = nextEntry(set1);
     }
 
-    do {
-        enterName(set1, set2->current->name);
-    } while(nextEntry(set2) != 0);
+    hasMore = startIterator(set2);
+    while(hasMore) {
+        enterName(union_set, set2->current->name);
+        hasMore = nextEntry(set2);
+    }
 
-    destroySymTab(set2);
-    return set1;
+    return union_set;
 }
 
 SymTab * doINTERSECTION(SymTab * set1, SymTab * set2) {
-    if(startIterator(set2) == 0) { 
-        destroySymTab(set2);
-        return set1; 
+    int hasMore = startIterator(set2);
+    SymTab * inter_set = createSymTab(17);
+
+    while(hasMore) {
+        if(findName(set1, set2->current->name)) {
+            enterName(inter_set, set2->current->name);
+        }
+        hasMore = nextEntry(set2);
     }
 
-    SymTab * intersect = createSymTab(17);
-    do {
-        if(findName(set1, set2->current->name)) {
-            enterName(intersect, set2->current->name);
-        }
-    } while(nextEntry(set2) != 0);
-
-    destroySymTab(set1);
-    destroySymTab(set2);
-    return intersect;
+    return inter_set;
 }
 
 SymTab * makeSet(char * setLit) {
+    int i = 0;
+    char c = setLit[i];
+    SymTab * set = createSymTab(17);
     
+    while(c != '\0') {
+        if(c >= 97 && c <= 122) {
+            enterName(set, c);
+        }
+        c = setLit[i++];
+    }
+
+    return set;
 }

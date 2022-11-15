@@ -10,8 +10,8 @@ extern int yyerror(char *s);
 %}
 
 %union {
-    char * string;
     SymTab * table;
+    char * string;
 }
 
 %type <string> Id
@@ -34,7 +34,7 @@ Term      : Term '*' Factor    {$$ = doINTERSECTION($1, $3);};
 Term      : Factor             {$$ = $1;};
 Factor    : '(' Expr ')'       {$$ = $2;};
 Factor    : Id                 {$$ = getVal($1);};
-Factor    : SetLit             {$$ = makeSet($1);};
+Factor    : SetLit             {$$ = makeSet(yytext);};
 Id        : Ident              {$$ = strdup(yytext);};
 
 %%

@@ -14,13 +14,14 @@ digit [0-9]
 
 %%
 {letter}({letter}|{digit})*     {return Ident;}
+\{({letter}*(\,)*)*\}
+\+                              {return '+';}
+\*                              {return '*';}
 \=                              {return '=';}
 \!                              {return '!';}
 \;                              {return ';';}
 \(                              {return '(';}
 \)                              {return ')';}
-\{                              {return '{';}
-\}                              {return '}';}
 [ ]                             {}
 \t                              {}
 \r                              {}
