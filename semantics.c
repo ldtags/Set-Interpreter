@@ -31,7 +31,7 @@ void printSymTab() {
         hasMore = nextEntry(table);
     }
 
-    destroySymTab(var);
+    free(var);
 }
 
 void storeVar(char * name, SymTab * set) {
