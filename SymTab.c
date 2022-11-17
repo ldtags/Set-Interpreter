@@ -58,13 +58,12 @@ int enterName(SymTab *table, char *name) {
     }
 
     SymEntry * prev = current;
-    int *cmp = malloc(sizeof(int));
+    int cmp = 1;
     while(current != NULL) { // iterating to end of list and checking for an existing name
-        *cmp = strcmp(current->name, name); // comparing the name of the current entry to the new name
-        if(*cmp == 0) {
+        cmp = strcmp(current->name, name); // comparing the name of the current entry to the new name
+        if(cmp == 0) {
             // name exists in list
             table->current = current;
-            free(cmp);
             return 0;
         }
         
@@ -75,7 +74,6 @@ int enterName(SymTab *table, char *name) {
     SymEntry * entry = createSymEntry(name);
     prev->next = entry;
     table->current = entry;
-    free(cmp);
     return 1;
 }
 
@@ -88,20 +86,18 @@ int findName(SymTab *table, char *name) {
         return 0;
     }
 
-    int *cmp = malloc(sizeof(int));
+    int cmp = 1;
     while(current != NULL) { //Iterate through the full list
-        *cmp = strcmp(current->name, name);
-        if(*cmp == 0){
+        cmp = strcmp(current->name, name);
+        if(cmp == 0){
             //The name exists in the list
             table->current = current;
-            free(cmp);
             return 1; 
         } 
         current = current->next;
     }
 
     // end of list has been reached and name was not found
-    free(cmp);
     return 0;
 }
 

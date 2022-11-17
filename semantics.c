@@ -8,18 +8,21 @@ extern SymTab *table;
 
 
 void printSymTab() {
-    int hasMore = startIterator(table);
-    int hashasMoreMore = 0;
-    printf("%20s\t%10s\n", "Variable", "Value");
-    SymTab * current = (SymTab*) malloc(sizeof(SymTab*));
+    int hasMore, hashasMoreMore = 0;
+    SymTab * var = (SymTab*) malloc(sizeof(SymTab*));
 
+    printf("%20s\t%10s\n", "Variable", "Value");
+
+    hasMore = startIterator(table);
     while(hasMore) {
+        // print each variable and it's associated value
         printf("%20s\t{", getCurrentName(table));
-        current = getCurrentAttr(table);
-        hashasMoreMore = startIterator(current);
+        var = getCurrentAttr(table);
+        hashasMoreMore = startIterator(var);
         while(hashasMoreMore) {
-            printf("%s", current->current->name);
-            hashasMoreMore = nextEntry(current);
+            // prints the value (i.e. SymTab) associated with the current variable
+            printf("%s", var->current->name);
+            hashasMoreMore = nextEntry(var);
             if(hashasMoreMore)
                 printf(", ");
         }
@@ -28,7 +31,7 @@ void printSymTab() {
         hasMore = nextEntry(table);
     }
 
-    destroySymTab(current);
+    destroySymTab(var);
 }
 
 void storeVar(char * name, SymTab * set) {
@@ -49,12 +52,14 @@ SymTab * doUNION(SymTab * set1, SymTab * set2) {
     int hasMore = 0;
     SymTab * union_set = createSymTab(17);
 
+    // add values from set1 to union_set
     hasMore = startIterator(set1);
     while(hasMore) {
         enterName(union_set, set1->current->name);
         hasMore = nextEntry(set1);
     }
 
+    // add values from set2 to union_set
     hasMore = startIterator(set2);
     while(hasMore) {
         enterName(union_set, set2->current->name);
@@ -68,6 +73,7 @@ SymTab * doINTERSECTION(SymTab * set1, SymTab * set2) {
     int hasMore = startIterator(set2);
     SymTab * inter_set = createSymTab(17);
 
+    // adds values that are in both set1 and set2 to inter_set
     while(hasMore) {
         if(findName(set1, set2->current->name)) {
             enterName(inter_set, set2->current->name);
@@ -83,10 +89,10 @@ SymTab * makeSet(char * setLit) {
     char *c = (char*) malloc(sizeof(char)*2);
     SymTab * set = createSymTab(17);
     
-    while((c[0] = setLit[i++]) != '\0') {
-        if(c[0] >= 97 && c[0] <= 122) {
-            c[1] = '\0';
-            enterName(set, c);
+    while((c[0] = setLit[i++]) != '\0') {   // iterating through string setLit
+        if(c[0] >= 97 && c[0] <= 122) {     // if the current char is a lower-case letter
+            c[1] = '\0';                    //   append the end-of-string char
+            enterName(set, c);              //   enter name into set
         }
     }
 
