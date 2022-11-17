@@ -1,5 +1,6 @@
 %{
     #include "IOMngr.h"
+    #include "SymTab.h"
     #include "y.tab.h"
 
     #define YY_INPUT(buf, result, max_size) \
@@ -14,7 +15,7 @@ digit [0-9]
 
 %%
 {letter}({letter}|{digit})*     {return Ident;}
-\{({letter}*(\,)*)*\}
+\{(({letter}\,)*{letter})?\}    {return SetLit;}
 \+                              {return '+';}
 \*                              {return '*';}
 \=                              {return '=';}

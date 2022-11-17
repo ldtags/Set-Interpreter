@@ -89,7 +89,7 @@ void writeIndicator(int column) {
         lineNum /= 10;
     }
 
-    for(int i = 0; i < column; i++) {
+    for(int i = 0; i < column - 1; i++) {
         fputc(' ', out);
     }
     fputc('^', out);

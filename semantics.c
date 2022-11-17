@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "SymTab.h"
 #include "semantics.h"
+#include "IOMngr.h"
 
 
-extern struct SymTab *table;
+extern SymTab *table;
 
 
 void printSymTab() {
@@ -25,11 +25,10 @@ void printSymTab() {
         }
         printf("}\n");
 
-        destroySymTab(current);
         hasMore = nextEntry(table);
     }
 
-    free(current);
+    destroySymTab(current);
 }
 
 void storeVar(char * name, SymTab * set) {
@@ -81,15 +80,16 @@ SymTab * doINTERSECTION(SymTab * set1, SymTab * set2) {
 
 SymTab * makeSet(char * setLit) {
     int i = 0;
-    char c = setLit[i];
+    char *c = (char*) malloc(sizeof(char)*2);
     SymTab * set = createSymTab(17);
     
-    while(c != '\0') {
-        if(c >= 97 && c <= 122) {
+    while((c[0] = setLit[i++]) != '\0') {
+        if(c[0] >= 97 && c[0] <= 122) {
+            c[1] = '\0';
             enterName(set, c);
         }
-        c = setLit[i++];
     }
 
+    free(c);
     return set;
 }

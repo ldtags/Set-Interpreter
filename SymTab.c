@@ -4,6 +4,7 @@
 #include <string.h>
 
 int hash(SymTab *table, char *name);
+void printTable(SymTab *table);
 SymEntry * createSymEntry(char *name);
 
 SymTab * createSymTab(int size) {
@@ -33,14 +34,14 @@ SymEntry * createSymEntry(char *name) {
 }
 
 void destroySymTab(SymTab *table) {
-    int notEmpty = 1;
-    startIterator(table);
-    SymEntry * current = table->current;
-    while(notEmpty) {
-        notEmpty = nextEntry(table);
-        free(current->name);
-        free(current);
-        current = table->current;
+    int hasMore = startIterator(table);
+    SymEntry * entry = table->current;
+
+    while(hasMore) {
+        entry = table->current;
+        free(entry->name);
+        free(entry);
+        hasMore = nextEntry(table);
     }
     free(table);
 }
@@ -63,6 +64,7 @@ int enterName(SymTab *table, char *name) {
         if(*cmp == 0) {
             // name exists in list
             table->current = current;
+            free(cmp);
             return 0;
         }
         
@@ -73,6 +75,7 @@ int enterName(SymTab *table, char *name) {
     SymEntry * entry = createSymEntry(name);
     prev->next = entry;
     table->current = entry;
+    free(cmp);
     return 1;
 }
 
@@ -91,12 +94,14 @@ int findName(SymTab *table, char *name) {
         if(*cmp == 0){
             //The name exists in the list
             table->current = current;
+            free(cmp);
             return 1; 
         } 
         current = current->next;
     }
 
     // end of list has been reached and name was not found
+    free(cmp);
     return 0;
 }
 
