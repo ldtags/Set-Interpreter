@@ -11,15 +11,15 @@ To interpret a file:
 This program returns the evaluated result of the input file.
 
 Grammar Productions:
-  <Prog>    ::= <StmtSeq>
-  <StmtSeq> ::= <Stmt> <StmtSeq>
-  <StmtSeq> ::= 
-  <Stmt>    ::= <Id> = <Expr> ;
-  <Expr>    ::= <Expr> + <Term>
-  <Expr>    ::= <Term>
-  <Term>    ::= <Term> * <Factor>
-  <Term>    ::= <Factor>
-  <Factor>  ::= ( <Expr> )
-  <Factor>  ::= <Id>
-  <Factor>  ::= *SetLit*
-  <Id>      ::= *Ident*
+  Prog    ::= StmtSeq
+  StmtSeq ::= Stmt StmtSeq
+  StmtSeq ::= 
+  Stmt    ::= Id '=' Expr ';'
+  Expr    ::= Expr '+' Term
+  Expr    ::= Term
+  Term    ::= Term '*' Factor
+  Term    ::= Factor
+  Factor  ::= '(' Expr ')'
+  Factor  ::= Id
+  Factor  ::= *SetLit*
+  Id      ::= *Ident*
