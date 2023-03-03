@@ -9,3 +9,8 @@ To interpret a file:
   - You may also specify a path to a listing file for compile-time errors, otherwise they are directed to STDOUT
   
 This program returns the evaluated result of the input file.
+
+Syntax:
+  - (set1 '+' set2) => set1 'union' set2
+  - (set1 '\*' set2) => set1 'intersect' set2
+  - x = (set)
