@@ -12,7 +12,8 @@ This program returns the evaluated result of the input file.
 
 Grammar Productions:
 
-  Prog    ::= StmtSeq\n
+  Prog    ::= StmtSeq
+  
   StmtSeq ::= Stmt StmtSeq
   
   StmtSeq ::= 
